@@ -1,1 +1,1 @@
-watch( '(.*)\.rst' )  {|md| system("sphinx-cook .") }
+watch( '(.*)\.rst' )  {|md| system("sphinx-cook -f pdf .") }
