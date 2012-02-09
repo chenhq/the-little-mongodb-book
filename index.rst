@@ -27,7 +27,7 @@ The Little MongoDB Book
    zh-tw/updating
    zh-tw/find
    zh-tw/modeling
-   zh-tw/whotouse
-   zh-tw/mongodb
+   zh-tw/whentouse
+   zh-tw/mapreduce
    zh-tw/performance
    zh-tw/conclusion

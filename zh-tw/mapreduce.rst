@@ -1,25 +1,28 @@
+**********
+MapReduce
+**********
 
-
-Chapter 6 - MapReduce
----------------------
-
-MapReduce is an approach to data processing which has two significant
-benefits over more traditional solutions. The first, and main, reason it
-was development is performance. In theory, MapReduce can be
-parallelized, allowing very large sets of data to be processed across
-many cores/CPUs/machines. As we just mentioned, this isn't something
+MapReduce 是一種資料處理的方法，\
+比起較傳統的作法，\
+它有兩個象徵性的好處。\
+第一個也是主要的理由，\
+就是它的發展是為了效能，\
+理論上，MapReduce 可以平行處理，\
+允許經由多顆核心、處理器或機器來處理非常大的資料集合，\
+就像我們已經提過的，\
+ As we just mentioned, this isn't something
 MongoDB is currently able to take advantage of. The second benefit of
 MapReduce is that you get to write real code to do your processing.
 Compared to what you'd be able to do with SQL, MapReduce code is
 infinitely richer and lets you push the envelope further before you need
 to use a more specialized solution.
 
-MapReduce is a pattern that has grown in popularity, and you can make
-use of it almost anywhere; C#, Ruby, Java, Python and so on all have
-implementations. I want to warn you that at first this'll seem very
-different and complicated. Don't get frustrated, take your time and play
-with it yourself. This is worth understanding whether you are using
-MongoDB or not.
+MapReduce 已經是愈來愈熱門的資料處理模式，\
+你幾乎可以將它用在任何地方，像是 C#、Ruby、Java、Python 及其他的實作。\
+我需要先告誡你的是，\
+這種作法很不一樣也很複雜，\
+先別沮喪，用點時間自己動手玩玩看，\
+這相當值得用於瞭解你是否要使用 MongoDB。
 
 A Mix of Theory and Practice
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -256,8 +259,8 @@ filter, sort and limit the documents that we want analyzed. We can also
 supply a ``finalize`` method to be applied to the results after the
 ``reduce`` step.
 
-In This Chapter
-~~~~~~~~~~~~~~~
+重點回顧
+=======
 
 This is the first chapter where we covered something truly different. If
 it made you uncomfortable, remember that you can always use MongoDB's
