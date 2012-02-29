@@ -10,12 +10,13 @@ MapReduce 是一種資料處理的方法，\
 理論上，MapReduce 可以平行處理，\
 允許經由多顆核心、處理器或機器來處理非常大的資料集合，\
 就像我們已經提過的，\
- As we just mentioned, this isn't something
-MongoDB is currently able to take advantage of. The second benefit of
-MapReduce is that you get to write real code to do your processing.
-Compared to what you'd be able to do with SQL, MapReduce code is
-infinitely richer and lets you push the envelope further before you need
-to use a more specialized solution.
+你還可以從 MongoDB 獲得其他好處。\
+MapReduce 的第二個好處，\
+就是允許你為處理程序撰寫實際的程式碼。\
+和你可以使用 SQL 做的事情相比，\
+MapReduce 程式碼有無限豐富的應用，\
+當你需要更特別的解決方案時，\
+它或許就能派上用場。
 
 MapReduce 已經是愈來愈熱門的資料處理模式，\
 你幾乎可以將它用在任何地方，像是 C#、Ruby、Java、Python 及其他的實作。\
@@ -24,23 +25,22 @@ MapReduce 已經是愈來愈熱門的資料處理模式，\
 先別沮喪，用點時間自己動手玩玩看，\
 這相當值得用於瞭解你是否要使用 MongoDB。
 
-A Mix of Theory and Practice
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+結合理論與實務
+============
 
-MapReduce is a two-step process. First you map and then you reduce. The
-mapping step transforms the inputted documents and emits a key=>value
-pair (the key and/or value can be complex). The reduce gets a key and
-the array of values emitted for that key and produces the final result.
-We'll look at each step, and the output of each step.
+MapReduce 的處理程序共有兩個步驟，\
+首先你需要先做映射（map）再做化簡（reduce），\
+映射的步驟將輸入的資料轉換，並建立 key-value pair（key 或 value 可以很複雜）；\
+化簡取得 key 和 value 的陣列，並且對 key 產生最後處理的結果。\
+接下來我們會看看每個步驟，以及每個步驟的輸出。
 
-The example that we'll be using is to generate a report of the number of
-hits, per day, we get on a resource (say a webpage). This is the *hello
-world* of MapReduce. For our purposes, we'll rely on a ``hits``
-collection with two fields: ``resource`` and ``date``. Our desired
-output is a breakdown by ``resource``, ``year``, ``month``, ``day`` and
-``count``.
+這個範例是我們將資源（就是網頁）每天的點擊次數產生成報表，\
+這是 MapReduce 的\ *hello world*\ 。\
+為達到這個目的，我們使用 ``hits`` 資料集合，\
+它包含兩個欄位：\ ``resource`` 和 ``date``\ 。\
+我們想得到的輸出結果包含 ``resource``\ 、\ ``year``\ 、\ ``month``\ 、\ ``day`` 及 ``count``\ 。
 
-Given the following data in ``hits``:
+假設 ``hits`` 集合有以下的資料:
 
 ::
 
@@ -56,7 +56,7 @@ Given the following data in ``hits``:
     index        Jan 21 2010 9:30
     index        Jan 22 2010 5:00
 
-We'd expect the following output:
+我們預期會有以下輸出：
 
 ::
 
@@ -67,21 +67,21 @@ We'd expect the following output:
     index     2010   1       21    2
     index     2010   1       22    1
 
-(The nice thing about this type of approach to analytics is that by
-storing the output, reports are fast to generate and data growth is
-controlled (per resource that we track, we'll add at most 1 document per
-day.)
+用這種方法來分析資料，最棒的事情就是輸出的保存，\
+報表可以很快產生，並且資料量的增長可以被控制。\
+（依照我們的記錄，每天最多只會增加一筆文件。）
 
-For the time being, focus on understanding the concept. At the end of
-this chapter, sample data and code will be given for you to try on your
-own.
+在開始之前，先專注在瞭解這個概念，\
+本章最後的範例資料和程式碼，可以讓你自己動手試試看。
 
-The first thing to do is look at the map function. The goal of map is to
-make it emit a value which can be reduced. It's possible for map to emit
-0 or more times. In our case, it'll always emit once (which is common).
-Imagine map as looping through each document in hits. For each document
-we want to emit a key with resource, year, month and day, and a simple
-value of 1:
+你需要做的第一件事情，就是看一下 map 函式，\
+map 目的是要建立能夠被化簡的值，\
+map 可能被發送（emit） 0 或多次，\
+在我們的案例中，\
+它永遠只會被發送 1 次（這是常見的情況）。\
+將 map 想像成在 ``hits`` 集合處理每一筆文件的迴圈，\
+對於每筆文件，我們發送包含 resource、year、month、day 的 key，\
+以及將 value 簡單地設為 1。
 
 ::
 
@@ -95,9 +95,9 @@ value of 1:
         emit(key, {count: 1}); 
     }
 
-``this`` refers to the current document being inspected. Hopefully
-what'll help make this clear for you is to see what the output of the
-mapping step is. Using our above data, the complete output would be:
+``this`` 參考到目前正在處理的文件。\
+希望映射的輸出結果可以幫助你瞭解，\
+參考以下的資料，這是所有完整的輸出。
 
 ::
 
@@ -107,13 +107,14 @@ mapping step is. Using our above data, the complete output would be:
     {resource: 'index', year: 2010, month: 0, day: 21} => [{count: 1}, {count: 1}]
     {resource: 'index', year: 2010, month: 0, day: 22} => [{count: 1}]
 
-Understanding this intermediary step is the key to understanding
-MapReduce. The values from emit are grouped together, as arrays, by key.
-.NET and Java developers can think of it as being of type
-``IDictionary<object, IList<object>>`` (.NET) or
-``HashMap<Object, ArrayList>`` (Java).
+瞭解中間的步驟，是你理解 MapReduce 的關鍵，\
+被發送的值會被群組化，\
+根據 key 產生陣列資料。\
+.NET 或 Java 開發者可以把它想成以下的型別定義：
+``IDictionary<object, IList<object>>``\ （.NET）或是\
+``HashMap<Object, ArrayList>``\ （Java）。
 
-Let's change our map function in some contrived way:
+讓我們用比較不自然的方法修改這個函式：
 
 ::
 
@@ -126,16 +127,16 @@ Let's change our map function in some contrived way:
         }
     }
 
-The first intermediary output would change to:
+第一筆輸出會變成：
 
 ::
 
     {resource: 'index', year: 2010, month: 0, day: 20} => [{count: 5}, {count: 1}, {count:1}]
 
-Notice how each emit generates a new value which is grouped by our key.
+請注意每次發送產生新的值，都會根據 key 分群。
 
-The reduce function takes each of these intermediary results and outputs
-a final result. Here's what ours looks like:
+化簡函式會取得這些中間的階段結果，並產生最終結果。\
+以下是我們使用的程式碼：
 
 ::
 
@@ -147,7 +148,7 @@ a final result. Here's what ours looks like:
         return {count: sum};
     };
 
-Which would output:
+這段程式將會輸出：
 
 ::
 
@@ -157,46 +158,47 @@ Which would output:
     {resource: 'index', year: 2010, month: 0, day: 21} => {count: 2}
     {resource: 'index', year: 2010, month: 0, day: 22} => {count: 1}
 
-Technically, the output in MongoDB is:
+就技術上來說，在 MongoDB 的輸出是：
 
 ::
 
     _id: {resource: 'home', year: 2010, month: 0, day: 20}, value: {count: 3}
 
-Hopefully you've noticed that this is the final result we were after.
+希望你已經注意到，這就是我們之後的最終結果。
 
-If you've really been paying attention, you might be asking yourself
-*why didn't we simply use ``sum = values.length``?* This would seem like
-an efficient approach when you are essentially summing an array of 1s.
-The fact is that reduce isn't always called with a full and perfect set
-of intermediate data. For example, instead of being called with:
+如果你很認真看這個範例，你可能會有個疑問：\
+為何我們不簡單地使用 ``sum = values.length`` 呢？\
+既然陣列的值都是 1，那麼計算陣列的資料筆數不是更有效率的方法嗎？\
+事實上化簡並非每次都會得到完整的階段資料，\
+舉例來說，假設有以下的資料需要化簡：
 
 ::
 
     {resource: 'home', year: 2010, month: 0, day: 20} => [{count: 1}, {count: 1}, {count:1}]
 
-Reduce could be called with:
+化簡實際上可能被這樣呼叫：
 
 ::
 
     {resource: 'home', year: 2010, month: 0, day: 20} => [{count: 1}, {count: 1}]
     {resource: 'home', year: 2010, month: 0, day: 20} => [{count: 2}, {count: 1}]
 
-The final output is the same (3), the path taken is simply different. As
-such, reduce must always be idempotent. That is, calling reduce multiple
-times should generate the same result as calling it once.
+最後的結果仍然相同（3），但取得這個結果的過程卻不一樣，\
+所以，化簡必須等冪，\
+也就是說不管分成幾次呼叫化簡，都必須跟只呼叫一次有相同計算結果。
 
-We aren't going to cover it here but it's common to chain reduce methods
-when performing more complex analysis.
+雖然我們在這裡不會提供更多的範例，\
+但是對於更複雜的分析來說，\
+這仍是化簡的的共通原則。
 
-Pure Practical
-~~~~~~~~~~~~~~
+純實務
+=====
 
-With MongoDB we use the ``mapReduce`` command on a collection.
-``mapReduce`` takes a map function, a reduce function and an output
-directive. In our shell we can create and pass a JavaScript function.
-From most libraries you supply a string of your functions (which is a
-bit ugly). First though, let's create our simple data set:
+在 MongoDB 我們對資料集合（collection）使用 ``mapReduce`` 指令，\
+``mapReduce`` 需要傳入 map 函式、reduce 函式及一個輸出指令，\
+我們在 shell 可以建立並傳遞一個 JavaScript 函式，\
+對多數的函式庫來說，你需要將函數用字串方式傳入（有點醜陋）。\
+第一件事，讓我們建立這個簡單的資料集：
 
 ::
 
@@ -211,9 +213,9 @@ bit ugly). First though, let's create our simple data set:
     db.hits.insert({resource: 'index', date: new Date(2010, 0, 21, 9, 30)});
     db.hits.insert({resource: 'index', date: new Date(2010, 0, 22, 5, 0)});
 
-Now we can create our map and reduce functions (the MongoDB shell
-accepts multi-line statements, you'll see *...* after hitting enter to
-indicate more text is expected):
+現在我們可以建立 map 及 reduce 函式\
+（MongoDB 的 shell 允許一次輸入多行的代碼，\
+在按下 Enter 後會看到 *...* 的提示，你可以輸入更多文字）：
 
 ::
 
@@ -230,46 +232,38 @@ indicate more text is expected):
         return {count: sum};
     };
 
-Which we can use the ``mapReduce`` command against our ``hits``
-collection by doing:
+我們可以對 ``hits`` 資料集合使用 ``mapReduce`` 指令：
 
 ::
 
     db.hits.mapReduce(map, reduce, {out: {inline:1}})
 
-If you run the above, you should see the desired output. Setting ``out``
-to ``inline`` means that the output from ``mapReduce`` is immediately
-streamed back to us. This is currently limited for results that are 16
-megabytes or less. We could instead specify ``{out: 'hit_stats'}`` and
-have the results stored in the ``hit_stats`` collections:
+如果你執行上面的程式，你就會看到輸出結果。\
+將 ``out`` 設定為 ``inline`` 表示將 ``mapReduce`` 的輸出結果直接傳回，\
+輸出結果目前有 16MB 容量的限制。\
+我們也可以指定``{out: 'hit_stats'}`` 讓結果保存在 ``hit_stats`` 資料集合。
 
 ::
 
     db.hits.mapReduce(map, reduce, {out: 'hit_stats'});
     db.hit_stats.find();
 
-When you do this, any existing data in ``hit_stats`` is lost. If we did
-``{out: {merge: 'hit_stats'}}`` existing keys would be replaced with the
-new values and new keys would be inserted as new documents. Finally, we
-can ``out`` using a ``reduce`` function to handle more advanced cases
-(such an doing an upsert).
+如果你這樣做，在 ``hit_stats`` 的現有資料將會遺失，\
+我們也可以改用 ``{out: {merge: 'hit_stats'}}`` 讓資料以新增或更新文件的方式保存。\
+最後一種方法，就是我們可以用 ``reduce`` 函式來處理更進階的情況（像是做 upsert）。
 
-The third parameter takes additional options, for example we could
-filter, sort and limit the documents that we want analyzed. We can also
-supply a ``finalize`` method to be applied to the results after the
-``reduce`` step.
+第三個參數還有其他選項可用，例如我們可以對分析結果的文件做篩選、排序或限制筆數。\
+我們也可以提供一個 ``finalize`` 方法，在 ``reduce`` 完成後對結果進行運算處理。
 
 重點回顧
 =======
 
-This is the first chapter where we covered something truly different. If
-it made you uncomfortable, remember that you can always use MongoDB's
-other `aggregation
-capabilities <http://www.mongodb.org/display/DOCS/Aggregation>`_ for
-simpler scenarios. Ultimately though, MapReduce is one of MongoDB's most
-compelling features. The key to really understanding how to write your
-map and reduce functions is to visualize and understand the way your
-intermediary data will look coming out of ``map`` and heading into
-``reduce``.
-
-
+本章的內容和傳統資料庫觀念差異較大，\
+如果這讓你感到還無法適應，\
+請記得你也可以只用 MongoDB 的
+`aggregation capabilities <http://www.mongodb.org/display/DOCS/Aggregation>`_
+處理一般狀況。\
+最後需要思考的，\
+MapReduce 是讓 MongoDB 名聲響亮的功能之一，\
+要真正瞭解如何撰寫 map 及 reduce 函式的關鍵，\
+就是透過由 ``map`` 到 ``reduce`` 過程中的資料。

@@ -1,0 +1,57 @@
+\documentclass[b5paper,12pt]{article}
+\usepackage[margin=0in]{geometry}
+
+\usepackage[cm-default]{fontspec}
+\usepackage{xcolor}
+\usepackage{fontspec}
+\usepackage[slantfont,boldfont,CJKaddspaces,CJKchecksingle,CJKnumber,fallback]{xeCJK}
+\XeTeXlinebreaklocale "zh"
+\XeTeXlinebreakskip = 0pt plus 1pt
+\defaultfontfeatures{Mapping=tex-text}
+\setCJKmainfont[BoldFont={Adobe Heiti Std},ItalicFont={Adobe Fangsong Std},BoldItalicFont={Adobe Kaiti Std}]{Adobe Song Std}
+\setCJKsansfont[BoldFont={Adobe Fan Heiti Std},ItalicFont={Adobe Fangsong Std},BoldItalicFont={Adobe Kaiti Std}]{Adobe Song Std}
+\setCJKmonofont{Adobe Ming Std} 
+\setCJKromanfont[BoldFont={Adobe Heiti Std},ItalicFont={Adobe Fangsong Std},BoldItalicFont={Adobe Kaiti Std}]{Adobe Song Std}
+\setmainfont{Adobe Garamond Pro}
+\setsansfont{Myriad Pro}
+\setmonofont{Courier Std}
+\setromanfont{Adobe Garamond Pro}
+
+\usepackage{graphicx}
+\usepackage{pstricks}
+\definecolor{pink}{rgb}{1,0.7,0.7}
+\definecolor{main}{RGB}{30,138,54}
+\let\psgrid\relax
+
+\begin{document}
+\thispagestyle{empty}
+
+\noindent
+\begin{pspicture}(\linewidth,\pdfpageheight)
+  \psgrid
+
+  \psline[linewidth=3mm,linecolor=main](0,0.99\pdfpageheight)(\linewidth,0.99\pdfpageheight)
+
+  \rput(0.5\linewidth,0.96\pdfpageheight){\textsf{\textbf{\fontsize{14pt}{14pt}\selectfont 高效能資料庫應用開發指南}}}
+
+  \rput[b](0.5\linewidth,5.5)
+    {\includegraphics[scale=1]{zh-tw/title-leaf.png}}
+
+  \rput(\linewidth,\pdfpageheight)
+    {\pspolygon*(-3.6,0)(-1.4,0)(0,-1.4)(0,-3.6)}
+  \rput(\linewidth,\pdfpageheight)
+    {\rput{-45}(-1,-1){\Large\textbf{\white NoSQL}}}
+  \rput(\linewidth,\pdfpageheight)
+    {\rput{-45}(-1.5,-1.5){\Large\textbf{\white 實戰系列}}}
+  
+  \rput[b](0.5\linewidth,15.4){\fontsize{40pt}{40pt}\selectfont The Little MongoDB Book}
+  
+  \rput[r](0.9\linewidth,14){\textsf{\textbf{\fontsize{28pt}{28pt}\selectfont 中文版}}}
+
+  \rput[l](0.05\linewidth,1){\textsf{\textbf{\fontsize{28pt}{28pt}\selectfont ContPub}}}
+
+  \rput[r](0.95\linewidth,1){\textsl{\fontsize{22pt}{22pt}\selectfont Karl Seguin}}
+
+\end{pspicture}
+
+\end{document}
